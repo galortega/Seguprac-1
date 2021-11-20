@@ -1,0 +1,22 @@
+PANTALLA ENTRADA
+[]
+
+PANTALLA SALIDA
+
+PANTALLA AUTORIZACIONES
+[!] agregar o quitar foto en la camara
+[ ] transicion de paginas igual que en la app original
+[√] abrir detalles de la autorizacion al ser tocada => boton x para cerrar
+[!] que las tarjetas se ordenen por fecha DEPENDE DEL SERVIDOR
+[√] tarjeta estado de caducida del pin
+[√] agregar a la tarjeta abierta boton de anular y verificacion de pin (anulada o aceptada)
+[√] error de componente no renderizado , memory leak
+[√] abrir opciones de abrir libreria o tomar foto
+[√] quitar pin activo y poner pin anulado o pin validado
+[√] poner icono de reloj
+[√] boton solo aparece si el pin esta activo.
+
+SERVER
+[ ] las autorizaciones estan asociadas a la manzana y la villa para que todo los pertenecientes puedan verlas
+[ ] agregar si el residente tiene o no acceso a crear AUTORIZACIONES
+[ ] autorizacion debe tener status (activo, anulado, usado)

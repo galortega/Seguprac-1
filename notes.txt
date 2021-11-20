@@ -1,0 +1,67 @@
+Datos que debe guardar el servidor
+
+#FORMULARIO DE ENTRADA y SALIDA
+crear peticion
+{
+    tipo_de_usuario
+    Manzana
+    Villa
+    nombres y apellidos
+    cedula
+    asunto
+    medio
+    placa
+}
+
+check pin [4 numeros] + manzana y villa
+debo recibir usuario asociado a ese pin
+nombres
+apellidos
+medio
+placa
+
+##REQUESTS
+
+0. GET => obtener manzada y villa asociada al guardian/ ya esta pido las casas
+1. GET => obtener todos los residentes asociados a un guardian/ ya esta tambien
+
+REQUEST DE ACUERDO AL TIPO DE USUARIO
+2. GET => obtener todos los empleados asociados a los residentes que estan asociados a un guardian
+3. GET => obtener todos los expresos escolares asociados al area del guardian
+4. GET => obtener todos los deliveries asociados al area del guardian
+5. GET => obtener todos los taxis asociados al area del guardian
+6. GET => obtener todos las mudanzas asociados al area del guardian
+7. GET => obtener todos los servicios basicos al area del guardian
+
+8. PUT => guardar imagen / ya esta
+
+
+ESTA PARTE ES PARA CUANDO SE CREE LA PANTALLA DE AUTORIZACIONES EN LA APP DE RESIDENTES.
+##AUTORIZACIONES
+
+GET => obtener todas las autorizaciones asociadas al usuario [ residente ]
+
+TIPO DE AUTORIZACION: TEMPORAL
+
+asociar a residente 
+tipo de usuario
+Manzana // SE TOMA DEL RESIDENTE QUE ESTA CREANDO LA AUTORIZACION
+Villa // SE TOMA DEL RESIDENTE QUE ESTA CREANDO LA AUTORIZACION
+nombres
+apellidos
+cedula
+telefono
+CON PIN => DEBE LLEGAR AL MOVIL
+
+FIJAS
+
+
+asociar a residente 
+tipo de usuario
+Manzana // SE TOMA DEL RESIDENTE QUE ESTA CREANDO LA AUTORIZACION
+Villa // SE TOMA DEL RESIDENTE QUE ESTA CREANDO LA AUTORIZACION
+nombres
+apellidos
+cedula
+telefono
+SIN PIN
