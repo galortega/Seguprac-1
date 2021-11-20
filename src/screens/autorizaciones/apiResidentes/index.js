@@ -1,6 +1,6 @@
 const authURL = 'https://api.practical.com.ec/auth';
 const apiURL = 'https://api.practical.com.ec/residente/';
-
+const ue = "2",
 export const crearAutorizacion = async (data, token) => {
     const { mz, villa, tipo, tipo_usuario, nombres, apellidos, cedula, telefono } = data
     const body = {

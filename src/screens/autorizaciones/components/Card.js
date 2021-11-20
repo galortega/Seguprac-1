@@ -23,7 +23,8 @@ export function Card({ type, pressHandler, data }) {
                     <Text style={styles.text}>{date}</Text>
                 </View>
             </View>
-        </TouchableOpacity>);
+        </TouchableOpacity>
+    );
 }
 
 const styles = StyleSheet.create({
