@@ -5,7 +5,7 @@ import LoginScreen from '../screens/login';
 import Entrance from '../screens/entrance';
 import Splash from '../screens/splash';
 import AutorizacionesTabsScreen from "../screens/autorizaciones/AutorizacionesTabsScreen";
-import CrearAutorizaciones from "../screens/autorizaciones/CrearAutorizacionesScreen";
+import CrearAutorizaciones from "../screens/autorizaciones/screens/CrearAutorizacionesScreen";
 import Exit from '../screens/exit';
 import theme from '../theme';
 

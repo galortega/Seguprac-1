@@ -1,13 +1,13 @@
 import React, { useState, useRef } from 'react';
 import { SafeAreaView, Platform, StatusBar, View, TextInput, Image, FlatList, TouchableOpacity, Text, StyleSheet } from 'react-native';
-import theme from './styles/theme';
+import theme from '../styles/theme';
 import { Modalize } from 'react-native-modalize';
-import { ImageSelection } from './components/ImageSelection';
-import { pickImageFuntion } from './actions/pickImageFunction';
-import Selection from './components/SelectionComponent';
-import cameraIcon from "../../../assets/camara.png"
-import galeryIcon from "../../../assets/captura-de-pantalla.png"
-import { chooseOpenCameraMethod } from './actions/chooseOpenCameraMethod';
+import { ImageSelection } from '../components/ImageSelection';
+import { pickImageFuntion } from '../actions/pickImageFunction';
+import Selection from '../components/SelectionComponent';
+import cameraIcon from "../../../../assets/camara.png"
+import galeryIcon from "../../../../assets/captura-de-pantalla.png"
+import { chooseOpenCameraMethod } from '../actions/chooseOpenCameraMethod';
 
 const TIPO_AUTH = ["Tipo de autorización", "Temporal", "Fija"];
 const USUARIOS = ['Usuario', 'Residente', 'Familiar', 'Empleado', 'Expreso escolar'];

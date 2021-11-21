@@ -5,7 +5,7 @@ import { UserStateProvider } from './src/user_context';
 const App = () => {
 	return (
 		<UserStateProvider>
-			<Navigator/>
+			<Navigator />
 		</UserStateProvider>
 	);
 };
