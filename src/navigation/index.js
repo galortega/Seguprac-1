@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from '../screens/login';
 import Entrance from '../screens/entrance';
 import Splash from '../screens/splash';
-import AutorizacionesTabsScreen from "../screens/autorizaciones/AutorizacionesTabsScreen";
+import AutorizacionesTabsScreen from "../screens/autorizaciones/AutorizacionesTabsScreenRouter";
 import CrearAutorizaciones from "../screens/autorizaciones/screens/CrearAutorizacionesScreen";
 import Exit from '../screens/exit';
 import theme from '../theme';
@@ -26,7 +26,7 @@ const Navigator = () => {
 
 	return (
 		<NavigationContainer>
-			<Stack.Navigator initialRouteName="Autorizaciones" screenOptions={{ transitionSpec: { open: config, close: config } }}>
+			<Stack.Navigator initialRouteName="Splash" screenOptions={{ transitionSpec: { open: config, close: config } }}>
 				<Stack.Screen
 					name="Splash"
 					component={Splash}
