@@ -1,26 +1,39 @@
-import React, { useState, useRef } from 'react';
-import { SafeAreaView, Platform, StatusBar, View, TextInput, Image, FlatList, TouchableOpacity, Text, StyleSheet } from 'react-native';
-import theme from './styles/theme';
+import React, { useRef, useState } from 'react';
+import {
+	FlatList,
+	Image,
+	Platform,
+	SafeAreaView,
+	StatusBar,
+	StyleSheet,
+	Text,
+	TextInput,
+	TouchableOpacity,
+	View,
+} from 'react-native';
 import { Modalize } from 'react-native-modalize';
-import { ImageSelection } from './components/ImageSelection';
-import { pickImageFuntion } from './actions/pickImageFunction';
-import Selection from './components/SelectionComponent';
-import cameraIcon from "../../../assets/camara.png"
-import galeryIcon from "../../../assets/captura-de-pantalla.png"
+import cameraIcon from '../../../assets/camara.png';
+import galeryIcon from '../../../assets/captura-de-pantalla.png';
+import { tiposAutorizacion, tiposUsuario } from '../../utils/constants';
 import { chooseOpenCameraMethod } from './actions/chooseOpenCameraMethod';
+import { pickImageFuntion } from './actions/pickImageFunction';
+import { postAutorizacion } from './apiResidentes';
+import { ImageSelection } from './components/ImageSelection';
+import Selection from './components/SelectionComponent';
+import theme from './styles/theme';
 
-const TIPO_AUTH = ["Tipo de autorización", "Temporal", "Fija"];
-const USUARIOS = ['Usuario', 'Residente', 'Familiar', 'Empleado', 'Expreso escolar'];
+const TIPO_AUTH = _.values(tiposAutorizacion);
+const USUARIOS = _.values(tiposUsuario);
 
 export default function CrearAutorizacionesScreen() {
-	const [image, setImage] = useState(null);
-	const [nombre, setNombre] = useState('');
-	const [apellido, setApellido] = useState('');
+	const [imagen, setImagen] = useState(null);
+	const [nombres, setNombre] = useState('');
+	const [apellidos, setApellido] = useState('');
 	const [cedula, setCedula] = useState('');
 	const [asunto, setAsunto] = useState('');
-	const [phone, setPhone] = useState('');
-	const [authType, setAuthType] = useState('Tipo de autorización')
-	const [userType, setUserType] = useState('Usuario')
+	const [telefono, setTelefono] = useState('');
+	const [tipo, setTipo] = useState('Tipo de autorización');
+	const [tipo_usuario, setTipoUsuario] = useState(tiposUsuario.VISITA);
 	const [selectionList, setSelectionList] = useState([]);
 	const modalRef = useRef(null);
 	const cameraOptionsRef = useRef(null);
@@ -34,66 +47,182 @@ export default function CrearAutorizacionesScreen() {
 	};
 
 	const selectionHandler = (item, type) => {
-		if (type === "Usuario") setUserType(item)
-		else setAuthType(item)
-		modalRef.current.close()
-	}
+		if (type === tiposUsuario.VISITA) setTipoUsuario(item);
+		else setTipo(item);
+		modalRef.current.close();
+	};
 
 	const buttonActivationHandler = () => {
-		if ([nombre, apellido, cedula, asunto, phone].includes("")) return false
-		else return true
-	}
+		if ([nombres, apellidos, cedula, asunto, telefono].includes('')) return false;
+		else return true;
+	};
 
-	const openCameraOptions = chooseOpenCameraMethod(cameraOptionsRef)
-	const pickImageCamera = pickImageFuntion(setImage, true);
-	const pickImageGallery = pickImageFuntion(setImage, false);
+	const openCameraOptions = chooseOpenCameraMethod(cameraOptionsRef);
+	const pickImageCamera = pickImageFuntion(setImagen, true);
+	const pickImageGallery = pickImageFuntion(setImagen, false);
 
 	return (
 		<SafeAreaView style={styles.container}>
-			{
-				Platform.OS === 'android'
-					? <StatusBar translucent={false} barStyle="light-content" hidden={false} backgroundColor={theme.palette.purple} />
-					: null
-			}
-			<ImageSelection image={image} pickImage={openCameraOptions} />
-			<Selection placeholder={authType} options={TIPO_AUTH} setSelectionList={setSelectionList} openHandler={openBottomDrawer} />
-			{authType === "Fija" && <Selection placeholder={userType} options={USUARIOS} setSelectionList={setSelectionList} openHandler={openBottomDrawer} />}
+			{Platform.OS === 'android' ? (
+				<StatusBar
+					translucent={false}
+					barStyle="light-content"
+					hidden={false}
+					backgroundColor={theme.palette.purple}
+				/>
+			) : null}
+			<ImageSelection image={imagen} pickImage={openCameraOptions} />
+			<Selection
+				placeholder={tipo}
+				options={TIPO_AUTH}
+				setSelectionList={setSelectionList}
+				openHandler={openBottomDrawer}
+			/>
+			{tipo === tiposAutorizacion.FIJA && (
+				<Selection
+					placeholder={tipo_usuario}
+					options={USUARIOS}
+					setSelectionList={setSelectionList}
+					openHandler={openBottomDrawer}
+				/>
+			)}
 			<View style={styles.textInput2Container}>
-				<TextInput placeholder="Nombres" style={styles.textInputInside} returnKeyType="next" value={nombre} onChangeText={text => setNombre(text)} />
-				<TextInput placeholder="Apellidos" style={styles.textInputInside} returnKeyType="next" value={apellido} onChangeText={text => setApellido(text)} />
+				<TextInput
+					placeholder="Nombres"
+					style={styles.textInputInside}
+					returnKeyType="next"
+					value={nombres}
+					onChangeText={(text) => setNombre(text)}
+				/>
+				<TextInput
+					placeholder="Apellidos"
+					style={styles.textInputInside}
+					returnKeyType="next"
+					value={apellidos}
+					onChangeText={(text) => setApellido(text)}
+				/>
 			</View>
-			<TextInput placeholder="Cédula" keyboardType="numeric" style={styles.textInput} returnKeyType="next" value={cedula} onChangeText={text => setCedula(text)} />
-			<TextInput placeholder="Asunto" style={styles.textInput} returnKeyType="next" value={phone} onChangeText={text => setPhone(text)} />
-			<TextInput placeholder="Telefono" keyboardType="numeric" style={styles.textInput} returnKeyType="next" value={asunto} onChangeText={text => setAsunto(text)} />
-			<TouchableOpacity disabled={!buttonActivationHandler()} style={[styles.button, { backgroundColor: buttonActivationHandler() ? theme.palette.purple : theme.palette.lightGrey }]}>
+			<TextInput
+				placeholder="Cédula"
+				keyboardType="numeric"
+				style={styles.textInput}
+				returnKeyType="next"
+				value={cedula}
+				onChangeText={(text) => setCedula(text)}
+			/>
+			<TextInput
+				placeholder="Asunto"
+				style={styles.textInput}
+				returnKeyType="next"
+				value={asunto}
+				onChangeText={(text) => setAsunto(text)}
+			/>
+			<TextInput
+				placeholder="Telefono"
+				keyboardType="numeric"
+				style={styles.textInput}
+				returnKeyType="next"
+				value={telefono}
+				onChangeText={(text) => setTelefono(text)}
+			/>
+			<TouchableOpacity
+				disabled={!buttonActivationHandler()}
+				onPress={async () => {
+					await postAutorizacion({
+						imagen,
+						nombres,
+						apellidos,
+						cedula,
+						asunto,
+						telefono,
+						tipo,
+						tipo_usuario,
+						mz: '124',
+						villa: '12',
+					});
+				}}
+				style={[
+					styles.button,
+					{
+						backgroundColor: buttonActivationHandler()
+							? theme.palette.purple
+							: theme.palette.lightGrey,
+					},
+				]}
+			>
 				<Text style={styles.buttonText}>Autorizar</Text>
 			</TouchableOpacity>
-			<Modalize ref={modalRef} snapPoint={theme.screenSize.height * 0.30} modalHeight={theme.screenSize.height * 0.30}>
+			<Modalize
+				ref={modalRef}
+				snapPoint={theme.screenSize.height * 0.3}
+				modalHeight={theme.screenSize.height * 0.3}
+			>
 				<FlatList
 					data={selectionList}
 					style={{ padding: theme.normalize(10) }}
-					keyExtractor={i => i} renderItem={({ item }) => {
+					keyExtractor={(i) => i}
+					renderItem={({ item }) => {
 						return (
-							<TouchableOpacity style={{ width: '100%', height: theme.normalize(45), alignItems: 'center' }} onPress={() => selectionHandler(item, selectionList[0])}>
+							<TouchableOpacity
+								style={{ width: '100%', height: theme.normalize(45), alignItems: 'center' }}
+								onPress={() => selectionHandler(item, selectionList[0])}
+							>
 								<Text style={{ fontSize: theme.fontsize.input }}>{item}</Text>
 							</TouchableOpacity>
 						);
-					}} />
+					}}
+				/>
 			</Modalize>
-			<Modalize ref={cameraOptionsRef} snapPoint={theme.screenSize.height * 0.20} modalHeight={theme.screenSize.height * 0.20} disableScrollIfPossible={true}>
-				<View style={{ width: theme.screenSize.width, height: theme.screenSize.height * 0.20, flexDirection: "row", alignItems: "center", justifyContent: "space-around", padding: theme.normalize(25) }}>
-					<TouchableOpacity onPress={pickImageCamera} style={{ alignItems: "center" }}>
-						<Image source={cameraIcon} style={{ width: theme.normalize(50), height: theme.normalize(50) }} />
-						<Text style={{ fontsize: theme.fontsize.title, color: theme.palette.black, fontWeight: "bold" }}>Camara</Text>
+			<Modalize
+				ref={cameraOptionsRef}
+				snapPoint={theme.screenSize.height * 0.2}
+				modalHeight={theme.screenSize.height * 0.2}
+				disableScrollIfPossible={true}
+			>
+				<View
+					style={{
+						width: theme.screenSize.width,
+						height: theme.screenSize.height * 0.2,
+						flexDirection: 'row',
+						alignItems: 'center',
+						justifyContent: 'space-around',
+						padding: theme.normalize(25),
+					}}
+				>
+					<TouchableOpacity onPress={pickImageCamera} style={{ alignItems: 'center' }}>
+						<Image
+							source={cameraIcon}
+							style={{ width: theme.normalize(50), height: theme.normalize(50) }}
+						/>
+						<Text
+							style={{
+								fontsize: theme.fontsize.title,
+								color: theme.palette.black,
+								fontWeight: 'bold',
+							}}
+						>
+							Camara
+						</Text>
 					</TouchableOpacity>
-					<TouchableOpacity onPress={pickImageGallery} style={{ alignItems: "center" }}>
-						<Image source={galeryIcon} style={{ width: theme.normalize(50), height: theme.normalize(50) }} />
-						<Text style={{ fontsize: theme.fontsize.title, color: theme.palette.black, fontWeight: "bold" }}>Galeria</Text>
+					<TouchableOpacity onPress={pickImageGallery} style={{ alignItems: 'center' }}>
+						<Image
+							source={galeryIcon}
+							style={{ width: theme.normalize(50), height: theme.normalize(50) }}
+						/>
+						<Text
+							style={{
+								fontsize: theme.fontsize.title,
+								color: theme.palette.black,
+								fontWeight: 'bold',
+							}}
+						>
+							Galeria
+						</Text>
 					</TouchableOpacity>
 				</View>
 			</Modalize>
 		</SafeAreaView>
-	)
+	);
 }
 
 const styles = StyleSheet.create({
@@ -101,7 +230,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		width: theme.screenSize.width,
 		alignItems: 'center',
-		backgroundColor: theme.palette.white
+		backgroundColor: theme.palette.white,
 	},
 	keyboardAware: {
 		width: theme.screenSize.width,
@@ -158,7 +287,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
-		marginBottom: theme.normalize(10)
+		marginBottom: theme.normalize(10),
 	},
 	textInput2: {
 		width: '33%',
@@ -207,7 +336,6 @@ const styles = StyleSheet.create({
 		fontSize: theme.fontsize.button,
 		fontWeight: 'bold',
 		color: theme.palette.white,
-		textAlign: 'center'
+		textAlign: 'center',
 	},
 });
-
